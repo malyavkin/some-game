@@ -1,10 +1,12 @@
-/**
- * Created by lexa on 4/23/2015.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
 
     public World world;
     public Camera camera;
+
+    public Entity anchor;
 
     public Controller(World world, Camera camera) {
         this.world = world;
@@ -75,6 +77,9 @@ public class Controller {
         }
     }
 
+    public void setAnchor(Entity anchor){
+        this.anchor = anchor;
+    }
 
     /**
      * Returns the distance between given coordinates and obstacle in given direction
@@ -104,12 +109,25 @@ public class Controller {
     }
 
     public void move(Entity entity, Direction direction) {
-        int d = Math.min(ray(entity,direction), entity.movementSpeed);
+        int d = Math.min(ray(entity, direction), entity.movementSpeed);
         if(d > 0) {
-            movePoint(camera.position, direction, d);
+            if(entity == this.anchor) {
+                movePoint(camera.position, direction, d);
+            }
             movePoint(world.heroes[0].position, direction, d);
         }
 
+
+    }
+
+    public List<Entity> queryEntities(Rectangle rectangle){
+        ArrayList<Entity> list = new ArrayList<>();
+        for (int i = 0; i < world.heroes.length; i++) {
+            if(world.heroes[i].getRectangle().intersects(rectangle)) {
+                list.add(world.heroes[i]);
+            }
+        }
+        return list;
 
     }
 

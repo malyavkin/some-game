@@ -1,17 +1,7 @@
-
-class Facing{
-    public static byte UP = 2;
-    public static byte RIGHT = 0;
-    public static byte DOWN = 6;
-    public static byte LEFT = 4;
-}
-
-
-
 public class Entity {
     // position in px
     public Point position = new Point(0,0);
-    public byte facing = Facing.DOWN;
+    public Direction facing = Direction.DOWN;
     public Model model;
     public Entity(Point position) {
         this.position = position;
@@ -45,7 +35,7 @@ public class Entity {
     /**
      * Gets coordinates of model angle
      * @param n 0-3; 0 - top-left, 1 - top-right, 2 - bottom-right, 3 - bottom-left
-     * @return
+     * @return Coordinates of corresponding angle
      */
     public Point getAngle(int n) {
         Point angle;
@@ -55,18 +45,35 @@ public class Entity {
                 angle = position;
                 break;
             case 1:
-                angle = position.add(model.size.onlyX()).add(Point.left);
+                angle = position.add(model.actual.size.onlyX()).add(Point.left);
                 break;
             case 2:
-                angle = position.add(model.size).add(new Point(-1,-1));
+                angle = position.add(model.actual.size).add(new Point(-1, -1));
                 break;
             case 3:
-                angle = position.add(model.size.onlyY()).add(Point.up);
+                angle = position.add(model.actual.size.onlyY()).add(Point.up);
                 break;
         }
         return angle;
     }
+    public int getFacingTextureID(Direction direction){
+        switch (direction) {
+            case RIGHT:
+                return 0;
+            case UP:
+                return 2;
+            case LEFT:
+                return 4;
+            case DOWN:
+                return 6;
+        }
+        return 0;
+    }
 
+    public Rectangle getRectangle(){
+        return new Rectangle(this.position, this.model.actual.size);
+
+    }
 
     //
     public int movementSpeed, attackSpeed;
@@ -81,6 +88,13 @@ public class Entity {
 class Character extends Entity {
     public Character(Point position) {
         super(position);
+    }
+
+    public Rectangle getBasicAttackArea(){
+        // this is model position
+        return this.getRectangle()
+                // move it to the facing direction
+                .move(Point.fromDirection(this.facing).mul(this.model.actual.size));
     }
 }
 

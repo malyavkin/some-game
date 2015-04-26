@@ -1,8 +1,10 @@
+import org.newdawn.slick.opengl.Texture;
+import org.w3c.dom.css.Rect;
+
 public class Camera {
-    public int width;
-    public int height;
+    public Point size;
     public Point position;
-    private int tileZoom = 3;
+    private int tileZoom = 4;
     private Point stage;
 
     /**
@@ -13,8 +15,7 @@ public class Camera {
      * @param stage position of a camera _relative_ to opengl window
      */
     public Camera(Point position, int w, int h, Point stage) {
-        this.width = w;
-        this.height = h;
+        this.size = new Point(w,h);
         //position of topleft corner of the camera relative to world origin in unscaled pixels
         this.position = position;
 
@@ -25,31 +26,34 @@ public class Camera {
     /**
      * Tells you if rectangle is visible in this camera
      */
-    // todo: BROKEN
 
-    private boolean isVisible(int x, int y, int w, int h) {
-        //todo:"fucking broke"
-        //throw "fucking broke"
 
-        int internalWidth = this.width/ this.tileZoom;
-        int internalHeight = this.height/ this.tileZoom;
-
-        boolean a,b,c,d;
-        a = (x >= this.position.x && x <= this.position.x+ internalWidth);
-        b = (x+w >= this.position.x && x+w <= this.position.x+ internalWidth);
-        c = (y >= this.position.y && y <= this.position.y+ internalHeight);
-        d = (y+h >= this.position.y && y+h <= this.position.y+ internalHeight);
-        return (a|b) & (c|d);
+    private boolean isVisible(Rectangle rectangle) {
+        Rectangle internal = new Rectangle(this.position, this.size.div(this.tileZoom));
+        return internal.intersects(rectangle);
     }
 
     private Point toGlobal (Point relative) {
         return relative.sub(this.position).add(stage);
     }
 
-    public void drawPoint(World world, Point point) {
+
+    public void drawRectangle(Rectangle rectangle, Color color){
+        for (int i = 0; i < 4; i++) {
+            drawPoint(rectangle.getAngle(i), color);
+        }
+    }
+
+    public void drawBorder(Entity entity, Color color){
+        for (int i = 0; i < 4; i++) {
+            drawPoint(entity.getAngle(i), color);
+        }
+    }
+
+    public void drawPoint(Point point, Color color) {
         Point squareLocation;
         squareLocation = point.sub(this.position).mul(this.tileZoom).add(stage);
-        DrawShit.shittySquare(squareLocation.x, squareLocation.y, this.tileZoom, this.tileZoom, new byte[]{0,127,0});
+        DrawShit.shittySquare(squareLocation.x, squareLocation.y, this.tileZoom, this.tileZoom, color);
 
     }
 
@@ -65,10 +69,10 @@ public class Camera {
         for (int i = 0; i < world.map.lvldata.length; i++) {
             tilePos.x = i%world.map.w;
             tilePos.y = (i-tilePos.x)/world.map.w;
-            boolean d = isVisible(tilePos.x*world.map.theme.size.x,
-                    tilePos.y*world.map.theme.size.y,
-                    world.map.theme.size.x,
-                    world.map.theme.size.y);
+
+            Rectangle tileRec = new Rectangle(tilePos.mul(world.map.theme.size),world.map.theme.size );
+
+            boolean d = isVisible(tileRec);
 
             if(d) {
                 squareLocation = tilePos.mul(world.map.theme.size).sub(this.position).mul(this.tileZoom).add(stage);
@@ -80,13 +84,14 @@ public class Camera {
 
         for (int i = 0; i < world.heroes.length; i++) {
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
-            squareLocation = toGlobal(world.heroes[i].position.sub(world.heroes[i].model.origin));
+            squareLocation = toGlobal(world.heroes[i].position.sub(world.heroes[i].model.actual.position));
             // ???????
             squareLocation= squareLocation.mul(this.tileZoom);
-            DrawShit.shittySquare(squareLocation, world.heroes[i].model.res.size.mul(this.tileZoom), world.heroes[i].model.res.textures[world.heroes[i].facing]);
+            Texture t = world.heroes[i].model.res.textures[world.heroes[i].getFacingTextureID(world.heroes[i].facing)];
+            DrawShit.shittySquare(squareLocation, world.heroes[i].model.res.size.mul(this.tileZoom), t);
 
         }
 
 
-    };
+    }
 }

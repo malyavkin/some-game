@@ -1,14 +1,7 @@
-import static org.lwjgl.opengl.GL11.*;
-
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.LWJGLException;
-import org.newdawn.slick.opengl.Texture;
-
-import java.net.ResponseCache;
-
 
 public class Main {
 
@@ -16,13 +9,13 @@ public class Main {
     static Camera camera;
     static long lastDate = System.currentTimeMillis();
     static int fps = 0;
-    static Character hero;
+    static Character hero, villain;
     static Controller controller;
     static Resources wasd;
 
     public static void main(String[] args) {
         createDisplay();
-        initgl();
+        DrawShit.initgl();
         initStuff();
             gameLoop();
         quit();
@@ -35,10 +28,10 @@ public class Main {
         Resources map = new Resources("res/hw.png", 8, 8);
 
         hero = new Knight(new Point(60,60));
-        Knight villain = new Knight(new Point(60,100));
+        villain = new Knight(new Point(60,100));
 
-        hero.model = new Model(hero_res, new Point(8,8), new Point(12,13));
-        villain.model = new Model(hero_res, new Point(8,8), new Point(12,13));
+        hero.model = new Model(hero_res, new Rectangle(12,13,8,8));
+        villain.model = new Model(hero_res, new Rectangle(12,13,8,8));
 
         world = new World(Map.generate(50,30), new Entity[]{hero, villain});
         world.map.theme = map;
@@ -46,22 +39,9 @@ public class Main {
         camera = new Camera(new Point(0,0), 1280, 720, new Point(0,0));
 
         controller = new Controller(world, camera);
+        controller.setAnchor(hero);
 
     }
-
-    private static void initgl() {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, 1280, 720, 0, 1, -1);
-        glMatrixMode(GL_MODELVIEW);
-        glEnable(GL_TEXTURE_2D);
-
-        //transparent pngs
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    }
-
     public static void createDisplay(){
         try {
             Display.setDisplayMode(new DisplayMode(1280,720));
@@ -70,48 +50,45 @@ public class Main {
         } catch (LWJGLException ex) {
             ex.printStackTrace();
         }
-
     }
     public static void gameLoop(){
         while (!Display.isCloseRequested()){
-            glClear(GL_COLOR_BUFFER_BIT);
+            DrawShit.clear();
             controller.draw();
 
             // DEBUG
 
-            for (int i = 0; i < 4; i++) {
-                camera.drawPoint(world, hero.getAngle(i));
-            }
+            camera.drawBorder(hero, Color.Green);
+            camera.drawBorder(villain, Color.Red);
+            camera.drawRectangle(hero.getBasicAttackArea(), Color.Blue);
+            System.out.println(controller.queryEntities(hero.getBasicAttackArea()).size());
+
+
 
             // END DEBUG
-
-
-
-
-
             // direction
             if(Keyboard.isKeyDown(Keyboard.KEY_W)){
                 controller.move(hero, Direction.UP);
-                world.heroes[0].facing = Facing.UP;
-
-                DrawShit.shittySquare(((1*8)+1)*4,0,32,32, wasd.textures[0]);
+                world.heroes[0].facing = Direction.UP;
+                // this stuff is just for testing, please ignore
+                DrawShit.shittySquare((8+1)*4,0,32,32, wasd.textures[0]);
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_A)){
                 controller.move(hero, Direction.LEFT);
-                world.heroes[0].facing = Facing.LEFT;
+                world.heroes[0].facing = Direction.LEFT;
 
-                DrawShit.shittySquare(((0*8)+0)*4,((1*8)+1)*4,32,32, wasd.textures[1]);
+                DrawShit.shittySquare(((0*8)+0)*4,((8)+1)*4,32,32, wasd.textures[1]);
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_S)){
                 controller.move(hero, Direction.DOWN);
-                world.heroes[0].facing = Facing.DOWN;
-                DrawShit.shittySquare(((1*8)+1)*4,((2*8)+2)*4,32,32, wasd.textures[2]);
+                world.heroes[0].facing = Direction.DOWN;
+                DrawShit.shittySquare(((8)+1)*4,((2*8)+2)*4,32,32, wasd.textures[2]);
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_D)){
                 controller.move(hero, Direction.RIGHT);
-                world.heroes[0].facing = Facing.RIGHT;
+                world.heroes[0].facing = Direction.RIGHT;
 
-                DrawShit.shittySquare(((2*8)+2)*4,((1*8)+1)*4,32,32, wasd.textures[3]);
+                DrawShit.shittySquare(((2*8)+2)*4,((8)+1)*4,32,32, wasd.textures[3]);
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 quit();

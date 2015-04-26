@@ -8,21 +8,20 @@ import java.io.IOException;
 
 class Model {
     Resources res;
-    Point origin;
-    Point size;
+    Rectangle actual;
+    //Point origin;
+    //Point size;
     int[] mapping;
 
     /**
      * Model constructor.
      * Model is responsible for visual appearance of the entity and its geometry
      * @param res Textures of the model
-     * @param size Size of the model in internal pixels
-     * @param origin position of the model relative to (0,0) of texture
+     * @param actual position and size of the model relative to (0,0) of texture
      */
-    public Model(Resources res, Point size,Point origin){
+    public Model(Resources res, Rectangle actual){
         this.res = res;
-        this.size = size;
-        this.origin = origin;
+        this.actual = actual;
     }
 
 
@@ -53,7 +52,7 @@ public class Resources {
         this.size.x = spriteW;
         try {
             BufferedImage[] loadedImages;
-            BufferedImage img = null;
+            BufferedImage img;
             img = ImageIO.read(new File(filename));
             loadedImages = sliceSprites(img, spriteW, spriteH);
 
