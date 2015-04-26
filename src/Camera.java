@@ -1,6 +1,10 @@
 import org.newdawn.slick.opengl.Texture;
 import org.w3c.dom.css.Rect;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Camera {
     public Point size;
     public Point position;
@@ -82,7 +86,11 @@ public class Camera {
         //player
 
 
+        Arrays.sort(world.heroes, new entityOrderComparator());
         for (int i = 0; i < world.heroes.length; i++) {
+
+            if(world.heroes[i].HP <= 0) continue;
+
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
             squareLocation = toGlobal(world.heroes[i].position.sub(world.heroes[i].model.actual.position));
             // ???????
@@ -93,5 +101,16 @@ public class Camera {
         }
 
 
+    }
+
+}
+
+class entityOrderComparator implements Comparator<Entity> {
+
+    @Override
+    public int compare(Entity o1, Entity o2) {
+        Rectangle r1 = o1.getRectangle();
+        Rectangle r2 = o2.getRectangle();
+        return r1.position.y + r1.size.y - r2.position.y - r2.size.y;
     }
 }

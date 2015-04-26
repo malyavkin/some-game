@@ -114,13 +114,13 @@ public class Controller {
             if(entity == this.anchor) {
                 movePoint(camera.position, direction, d);
             }
-            movePoint(world.heroes[0].position, direction, d);
+            movePoint(entity.position, direction, d);
         }
 
 
     }
 
-    public List<Entity> queryEntities(Rectangle rectangle){
+    public ArrayList<Entity> queryEntities(Rectangle rectangle){
         ArrayList<Entity> list = new ArrayList<>();
         for (int i = 0; i < world.heroes.length; i++) {
             if(world.heroes[i].getRectangle().intersects(rectangle)) {
@@ -129,6 +129,14 @@ public class Controller {
         }
         return list;
 
+    }
+
+    public void basicAttack(Character character) {
+        ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());
+        for (Entity enemy : enemies) {
+            enemy.HP -= character.AD;
+            System.out.println(enemy.HP + "/" + enemy.maxHP + "hp");
+        }
     }
 
 }

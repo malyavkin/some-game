@@ -10,6 +10,12 @@ public class DrawShit {
         shittySquare(position.x, position.y, size.x, size.y, t);
     }
 
+    public static void shittySquare(Point position, Point size, Texture t, Color color) {
+        glColor3b(color.r, color.g, color.b);
+        shittySquare(position,size,t);
+        glColor3b((byte) 127, (byte) 127, (byte) 127);
+    }
+
     public static void shittySquare(int x, int y, int w, int h, Texture t) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         t.bind();

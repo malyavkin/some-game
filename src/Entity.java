@@ -82,6 +82,7 @@ public class Entity {
     public int AD, AP;
     public int armor, magres;
 
+
 }
 
 
