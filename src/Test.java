@@ -84,7 +84,7 @@ public class Test {
         System.out.println("test 13 " + one.intersects(two));
         System.out.println("test 13 " + two.intersects(one));
 
-       // Main.main(args);
+        System.out.println("");
 
 
     }

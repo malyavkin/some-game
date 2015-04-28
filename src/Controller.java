@@ -108,8 +108,142 @@ public class Controller {
         return Math.min(len1,len2);
     }
 
+
+    public boolean rayEntities_rectangleOnRay(Point point, Rectangle rectangle, Direction direction){
+        boolean result = false;
+        switch (direction) {
+            case UP:
+                result = rectangle.position.x <= point.x
+                        && rectangle.position.x+rectangle.size.x-1 >= point.x
+                        && rectangle.position.y <= point.y;
+                break;
+            case RIGHT:
+                // top of a rectangle is higher
+                result = rectangle.position.y <= point.y
+                        // bottom of a rectangle is lower
+                        && rectangle.position.y+rectangle.size.y-1 >= point.y
+                        // left of a rectangle is to the right
+                        && rectangle.position.x >= point.x;
+                break;
+            case DOWN:
+                result = rectangle.position.x <= point.x
+                        && rectangle.position.x+rectangle.size.x-1 >= point.x
+                        && rectangle.position.y >= point.y;
+                break;
+            case LEFT:
+                result = rectangle.position.y <= point.y
+                        && rectangle.position.y+rectangle.size.y-1 >= point.y
+                        && rectangle.position.x <= point.x;
+                break;
+        }
+        return result;
+    }
+
+    public boolean rayEntities_isCloser(int bestValue, int thisValue, Direction direction) {
+        boolean result = false;
+        switch (direction) {
+            case UP:
+            case LEFT:
+                result = thisValue > bestValue;
+                break;
+            case RIGHT:
+            case DOWN:
+                result = thisValue < bestValue;
+                break;
+        }
+        return result;
+
+    }
+
+    public int rayEntities_getComparableValue(Rectangle rectangle, Direction direction){
+        int result = 0;
+        switch (direction) {
+            case UP:
+                result = rectangle.position.y + rectangle.size.y-1;
+                break;
+            case RIGHT:
+                // we shooting ray to the right, so it hits left border of rectangle
+                result = rectangle.position.x;
+                break;
+            case DOWN:
+                result = rectangle.position.y;
+                break;
+            case LEFT:
+                result = rectangle.position.x + rectangle.size.x-1;
+                break;
+        }
+        return result;
+    }
+
+    public int rayEntities_getReturnValue(int bestValue, Point point, Direction direction) {
+        int result = 0;
+        switch (direction) {
+            case UP:
+                result = point.y-bestValue;
+                break;
+            case LEFT:
+                result = point.x-bestValue;
+                break;
+            case RIGHT:
+                result = bestValue-point.x;
+                break;
+            case DOWN:
+                result = bestValue-point.y;
+                break;
+        }
+        return result;
+    }
+    public int rayEntities(Entity entity, Direction direction) {
+
+        Point[] angles = entity.getAnglesOfSide(direction);
+        boolean first = true;
+        int retval = -1, curval;
+        for (int i = 0; i < 2; i++) {
+            curval = rayEntities(angles[i].add(Point.fromDirection(direction)), direction);
+            if(curval != -1) {
+                if(first) {
+                    retval = curval;
+                    first = false;
+                } else {
+                    retval = Math.min(retval, curval);
+                }
+            }
+        }
+
+        return retval;
+
+
+    }
+
+    public int rayEntities(Point point, Direction direction) {
+        boolean first = true;
+        int bestValue = 0;
+        int cmpval;
+        Rectangle rectangle;
+        for (int i = 0; i < world.heroes.length; i++) {
+            rectangle = world.heroes[i].getRectangle();
+
+            if(  rayEntities_rectangleOnRay(point,rectangle,direction)   ) {
+                cmpval = rayEntities_getComparableValue(rectangle, direction);
+                if(first || rayEntities_isCloser(bestValue, cmpval, direction)) {
+                    first = false;
+                    bestValue = cmpval;
+                }
+            }
+        }
+        if (first) return -1;
+        // this doesn't take into account the direction
+        return rayEntities_getReturnValue(bestValue, point, direction);
+    }
+
     public void move(Entity entity, Direction direction) {
         int d = Math.min(ray(entity, direction), entity.movementSpeed);
+        int d1 = rayEntities(entity, direction);
+        if(d1 >= 0) {
+            d = Math.min(d,d1);
+        }
+
+
         if(d > 0) {
             if(entity == this.anchor) {
                 movePoint(camera.position, direction, d);

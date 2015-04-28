@@ -60,9 +60,9 @@ public class Main {
 
             // DEBUG
 
-            camera.drawBorder(hero, Color.Green);
+            //camera.drawBorder(hero, Color.Green);
             //camera.drawBorder(villain, Color.Red);
-            camera.drawRectangle(hero.getBasicAttackArea(), Color.Blue);
+            //camera.drawRectangle(hero.getBasicAttackArea(), Color.Blue);
             //System.out.println(controller.queryEntities(hero.getBasicAttackArea()).size());
             if (villain.HP<= 0) {
                 Font.render("KILLED", new Point(100,100), 4, Color.Red);
@@ -112,6 +112,7 @@ public class Main {
                 lastDate = System.currentTimeMillis();
                 System.out.println(fps + " fps");
                 fps =0;
+
             }
             Display.update();
             Display.sync(60);
