@@ -2,7 +2,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.LWJGLException;
-
 public class Main {
 
     static World world;
@@ -30,11 +29,13 @@ public class Main {
 
         hero = new Knight(new Point(60,60));
         villain = new Knight(new Point(60,100));
+        Knight villain2 = new Knight(new Point(80,100));
 
         hero.model = new Model(hero_res, new Rectangle(12,13,8,8));
         villain.model = new Model(hero_res, new Rectangle(12,13,8,8));
+        villain2.model = new Model(hero_res, new Rectangle(12,13,8,8));
 
-        world = new World(Map.generate(50,30), new Entity[]{hero, villain});
+        world = new World(Map.generate(50,30), new Entity[]{hero, villain,villain2});
         world.map.theme = map;
 
         camera = new Camera(new Point(0,0), 1280, 720, new Point(0,0));
