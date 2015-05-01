@@ -6,6 +6,15 @@ public class Controller {
     public World world;
     public Camera camera;
 
+    public Entity getAnchor() {
+        return anchor;
+    }
+
+
+    public void setAnchor(Entity anchor) {
+        this.anchor = anchor;
+    }
+
     public Entity anchor;
 
     public Controller(World world, Camera camera) {
@@ -77,9 +86,7 @@ public class Controller {
         }
     }
 
-    public void setAnchor(Entity anchor){
-        this.anchor = anchor;
-    }
+
 
     /**
      * Returns the distance between given coordinates and obstacle in given direction
@@ -264,6 +271,13 @@ public class Controller {
         return list;
 
     }
+    public void basicAttack(Entity entity) {
+        try {
+            basicAttack(((Character) entity));
+        } catch (Exception x) {x.getCause();}
+
+    }
+
 
     public void basicAttack(Character character) {
         ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());

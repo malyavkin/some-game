@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Test {
     public static void main(String[] args) {
         Rectangle one = new Rectangle(0,0,10,10), two;
@@ -84,7 +86,6 @@ public class Test {
         System.out.println("test 13 " + one.intersects(two));
         System.out.println("test 13 " + two.intersects(one));
 
-        System.out.println("");
 
 
     }

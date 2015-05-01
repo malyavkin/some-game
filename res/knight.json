@@ -1,0 +1,7 @@
+{
+  "texture": "res/knight.png",
+  "frame_size" : [32,32],
+  "origin" : [12,13],
+  "model_size" : [8,8]
+
+}

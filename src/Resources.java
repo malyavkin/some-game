@@ -71,3 +71,6 @@ public class Resources {
 }
 
 
+class ModelFactory {
+    public ModelFactory(){}
+}
