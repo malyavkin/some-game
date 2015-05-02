@@ -3,6 +3,7 @@ import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class Camera {
@@ -85,18 +86,22 @@ public class Camera {
         }
         //player
 
+        Collections.sort(world.heroes, (o1, o2) -> {
 
-        Arrays.sort(world.heroes, new entityOrderComparator());
-        for (int i = 0; i < world.heroes.length; i++) {
+            Rectangle r1 = o1.getRectangle();
+            Rectangle r2 = o2.getRectangle();
+            return r1.position.y + r1.size.y - r2.position.y - r2.size.y;
+        });
+        for (int i = 0; i < world.heroes.size(); i++) {
 
-            if(world.heroes[i].HP <= 0) continue;
+            if(world.heroes.get(i).HP <= 0) continue;
 
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
-            squareLocation = toGlobal(world.heroes[i].position.sub(world.heroes[i].model.actual.position));
+            squareLocation = toGlobal(world.heroes.get(i).position.sub(world.heroes.get(i).model.actual.position));
             // ???????
             squareLocation= squareLocation.mul(this.tileZoom);
-            Texture t = world.heroes[i].model.res.textures[world.heroes[i].getFacingTextureID(world.heroes[i].facing)];
-            DrawShit.shittySquare(squareLocation, world.heroes[i].model.res.size.mul(this.tileZoom), t);
+            Texture t = world.heroes.get(i).model.res.textures[world.heroes.get(i).getFacingTextureID(world.heroes.get(i).facing)];
+            DrawShit.shittySquare(squareLocation, world.heroes.get(i).model.res.size.mul(this.tileZoom), t);
 
         }
 

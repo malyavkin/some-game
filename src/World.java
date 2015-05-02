@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 import java.util.Random;
 public class World {
     public Map map;
-    public Entity[] heroes;
-    public World(Map map, Entity[] heroes){
+    public ArrayList<Entity> heroes;
+    public World(Map map, ArrayList<Entity> heroes){
         this.map = map;
-        this.heroes = new Character[1];
+
         this.heroes = heroes;
     }
 }

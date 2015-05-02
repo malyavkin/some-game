@@ -4,6 +4,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.LWJGLException;
+
+import java.util.ArrayList;
+
+
 public class Main {
 
     static World world;
@@ -48,9 +52,13 @@ public class Main {
         villain2.model = heroModel;
 
         // creating stage
+        ArrayList<Entity> l = new ArrayList<>() ;
+        l.add(hero);
+        l.add(villain);
+        l.add(villain2);
 
         Resources map = new Resources("res/hw.png", 8, 8);
-        world = new World(Map.generate(50,30), new Entity[]{hero, villain,villain2});
+        world = new World(Map.generate(50,30), l);
         world.map.theme = map;
 
         // creating view
@@ -84,9 +92,10 @@ public class Main {
             //camera.drawBorder(villain, Color.Red);
             //camera.drawRectangle(hero.getBasicAttackArea(), Color.Blue);
             //System.out.println(controller.queryEntities(hero.getBasicAttackArea()).size());
-            if (villain.HP<= 0 || true) {
-                Font.render("killed", new Point(100,100), 4, Color.Red);
-            }
+
+
+                Font.render("Enemy 1 :"+ villain.HP + "/" + villain.maxHP + " hp", new Point(160,16), 2, Color.Red);
+                Font.render("Enemy 2 :"+ villain2.HP + "/" + villain2.maxHP + " hp", new Point(160,32), 2, Color.Red);
 
 
 

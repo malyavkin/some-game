@@ -227,8 +227,8 @@ public class Controller {
         int bestValue = 0;
         int cmpval;
         Rectangle rectangle;
-        for (int i = 0; i < world.heroes.length; i++) {
-            rectangle = world.heroes[i].getRectangle();
+        for (int i = 0; i < world.heroes.size(); i++) {
+            rectangle = world.heroes.get(i).getRectangle();
 
             if(  rayEntities_rectangleOnRay(point,rectangle,direction)   ) {
                 cmpval = rayEntities_getComparableValue(rectangle, direction);
@@ -263,9 +263,9 @@ public class Controller {
 
     public ArrayList<Entity> queryEntities(Rectangle rectangle){
         ArrayList<Entity> list = new ArrayList<>();
-        for (int i = 0; i < world.heroes.length; i++) {
-            if(world.heroes[i].getRectangle().intersects(rectangle)) {
-                list.add(world.heroes[i]);
+        for (int i = 0; i < world.heroes.size(); i++) {
+            if(world.heroes.get(i).getRectangle().intersects(rectangle)) {
+                list.add(world.heroes.get(i));
             }
         }
         return list;

@@ -33,7 +33,8 @@ class FontLoader {
         try {
             ch= chars.get(c.toString());
         } catch (Exception x) {
-            x.printStackTrace();
+            System.out.println("Character " + c.toString() + " is not declared");
+            //x.printStackTrace();
         }
 
         return resources.textures[ch];
@@ -42,10 +43,16 @@ class FontLoader {
         String texture = (String) jsonObject.get("texture");
         JSONArray frame_size = (JSONArray)jsonObject.get("frame_size");
         JSONObject mapping = ((JSONObject) jsonObject.get("symbols"));
-        for(Iterator iterator = mapping.keySet().iterator(); iterator.hasNext();) {
-            String key = (String) iterator.next();
+        for (Object o1 : mapping.keySet()) {
+            String key = (String) o1;
             chars.put(key, ((Long) mapping.get(key)).intValue());
         }
+        mapping = ((JSONObject) jsonObject.get("map"));
+        for (Object o : mapping.keySet()) {
+            String key = (String) o;
+            chars.put(key, chars.get(mapping.get(key)));
+        }
+
 
 
         new ResourceLoader(
