@@ -271,18 +271,23 @@ public class Controller {
         return list;
 
     }
-    public void basicAttack(Entity entity) {
+    /*public void basicAttack(Entity entity) {
         try {
             basicAttack(((Character) entity));
         } catch (Exception x) {x.getCause();}
 
-    }
+    }*/
 
 
-    public void basicAttack(Character character) {
+    public void basicAttack(Entity character) {
         ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());
         for (Entity enemy : enemies) {
             enemy.HP -= character.AD;
+            if (enemy.HP <=0) {
+                world.heroes.remove(enemy);
+
+
+            }
             System.out.println(enemy.HP + "/" + enemy.maxHP + "hp");
         }
     }

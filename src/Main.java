@@ -14,10 +14,10 @@ public class Main {
     static Camera camera;
     static long lastDate = System.currentTimeMillis();
     static int fps = 0;
-    static Character villain, villain2;
+    static Character villain;
     static Controller controller;
     static Resources wasd;
-
+    static ArrayList<Entity> l;
     static boolean space_pressed;
     public static void main(String[] args) {
         createDisplay();
@@ -43,19 +43,22 @@ public class Main {
 
         //setting up the characters
 
-        villain2 = new Knight(new Point(60,60));
-        villain = new Knight(new Point(60,100));
-        Knight hero = new Knight(new Point(80,100));
+        Knight hero = new Knight(new Point(80,70));
 
         hero.model = heroModel;
-        villain.model = heroModel;
-        villain2.model = heroModel;
+
 
         // creating stage
-        ArrayList<Entity> l = new ArrayList<>() ;
+        l = new ArrayList<>() ;
         l.add(hero);
-        l.add(villain);
-        l.add(villain2);
+
+        for (int i = 0; i < 5; i++) {
+            villain = new Knight(new Point(30+15*i,50));
+            villain.model = heroModel;
+            l.add(villain);
+        }
+
+
 
         Resources map = new Resources("res/hw.png", 8, 8);
         world = new World(Map.generate(50,30), l);
@@ -93,9 +96,9 @@ public class Main {
             //camera.drawRectangle(hero.getBasicAttackArea(), Color.Blue);
             //System.out.println(controller.queryEntities(hero.getBasicAttackArea()).size());
 
-
-                Font.render("Enemy 1 :"+ villain.HP + "/" + villain.maxHP + " hp", new Point(160,16), 2, Color.Red);
-                Font.render("Enemy 2 :"+ villain2.HP + "/" + villain2.maxHP + " hp", new Point(160,32), 2, Color.Red);
+            for (int i = 0; i < l.size(); i++) {
+                Font.render("character "+i+":"+ l.get(i).HP + "/" + l.get(i).maxHP + " hp", new Point(160,16*(i+1)), 2, Color.Red);
+            }
 
 
 

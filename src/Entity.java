@@ -81,7 +81,10 @@ public class Entity {
     public int mana, maxMana;
     public int AD, AP;
     public int armor, magres;
+    public Rectangle getBasicAttackArea(){
+        return new Rectangle(0,0,0,0);
 
+    }
 
 }
 
