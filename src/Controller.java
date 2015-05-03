@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Controller {
 
@@ -96,7 +95,7 @@ public class Controller {
         Tile current = world.map.getTile(currentTile);
         int distance = -1;
 
-        while (current != null && !current.isCollideable()) {
+        while (current != null && !current.canCollide()) {
             if(distance == -1) {
                 distance =getInitialDistance(start, direction);
             } else {
@@ -282,13 +281,13 @@ public class Controller {
     public void basicAttack(Entity character) {
         ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());
         for (Entity enemy : enemies) {
-            enemy.HP -= character.AD;
-            if (enemy.HP <=0) {
+            enemy.hp -= character.ad;
+            if (enemy.hp <=0) {
                 world.heroes.remove(enemy);
 
 
             }
-            System.out.println(enemy.HP + "/" + enemy.maxHP + "hp");
+            System.out.println(enemy.hp + "/" + enemy.max_hp + "hp");
         }
     }
 

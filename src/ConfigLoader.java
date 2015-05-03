@@ -1,7 +1,6 @@
 import java.io.FileReader;
 import java.lang.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -50,7 +49,9 @@ class FontLoader {
         mapping = ((JSONObject) jsonObject.get("map"));
         for (Object o : mapping.keySet()) {
             String key = (String) o;
-            chars.put(key, chars.get(mapping.get(key)));
+            String mapTo = (String)mapping.get(key);
+            int pos = chars.get(mapTo);
+            chars.put(key, pos);
         }
 
 

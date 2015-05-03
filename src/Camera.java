@@ -1,10 +1,5 @@
 import org.newdawn.slick.opengl.Texture;
-import org.w3c.dom.css.Rect;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class Camera {
     public Point size;
@@ -42,6 +37,14 @@ public class Camera {
         return relative.sub(this.position).add(stage);
     }
 
+    public void centerTo (Entity entity) {
+        Point point = entity.position.add(entity.model.actual.size.div(2));
+        centerTo(point);
+    }
+
+    public void centerTo (Point point){
+        this.position = point.sub(this.size.div(tileZoom*2));
+    }
 
     public void drawRectangle(Rectangle rectangle, Color color){
         for (int i = 0; i < 4; i++) {
@@ -71,7 +74,7 @@ public class Camera {
         Point squareLocation;
 
 
-        for (int i = 0; i < world.map.lvldata.length; i++) {
+        for (int i = 0; i < world.map.levelData.length; i++) {
             tilePos.x = i%world.map.w;
             tilePos.y = (i-tilePos.x)/world.map.w;
 
@@ -81,7 +84,7 @@ public class Camera {
 
             if(d) {
                 squareLocation = tilePos.mul(world.map.theme.size).sub(this.position).mul(this.tileZoom).add(stage);
-                DrawShit.shittySquare(squareLocation, real, world.map.theme.textures[world.map.lvldata[i].type]);
+                DrawShit.shittySquare(squareLocation, real, world.map.theme.textures[world.map.levelData[i].type]);
             }
         }
         //player
@@ -94,7 +97,7 @@ public class Camera {
         });
         for (int i = 0; i < world.heroes.size(); i++) {
 
-            if(world.heroes.get(i).HP <= 0) continue;
+            if(world.heroes.get(i).hp <= 0) continue;
 
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
             squareLocation = toGlobal(world.heroes.get(i).position.sub(world.heroes.get(i).model.actual.position));
@@ -108,14 +111,4 @@ public class Camera {
 
     }
 
-}
-
-class entityOrderComparator implements Comparator<Entity> {
-
-    @Override
-    public int compare(Entity o1, Entity o2) {
-        Rectangle r1 = o1.getRectangle();
-        Rectangle r2 = o2.getRectangle();
-        return r1.position.y + r1.size.y - r2.position.y - r2.size.y;
-    }
 }

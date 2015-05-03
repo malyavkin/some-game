@@ -77,10 +77,10 @@ public class Entity {
 
     //
     public int movementSpeed, attackSpeed;
-    public int HP, maxHP;
-    public int mana, maxMana;
-    public int AD, AP;
-    public int armor, magres;
+    public int hp, max_hp;
+    public int mp, max_mp;
+    public int ad, ap;
+    public int armor, magic_resistance;
     public Rectangle getBasicAttackArea(){
         return new Rectangle(0,0,0,0);
 
@@ -105,16 +105,16 @@ class Character extends Entity {
 class Knight extends Character {
     public Knight(Point point){
         super(point);
-        this.maxHP = 600;
-        this.HP = 600;
-        this.maxMana = 400;
-        this.mana = 400;
+        this.max_hp = 600;
+        this.hp = 600;
+        this.max_mp = 400;
+        this.mp = 400;
         this.movementSpeed =1;
         this.attackSpeed = 1500;
-        this.AD = 50;
-        this.AP = 0;
+        this.ad = 50;
+        this.ap = 0;
         this.armor = 50;
-        this.magres = 50;
+        this.magic_resistance = 50;
 
 
     }
