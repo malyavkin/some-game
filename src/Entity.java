@@ -1,3 +1,5 @@
+import org.newdawn.slick.opengl.Texture;
+
 public class Entity {
     // position in px
     public Point position = new Point(0,0);
@@ -56,7 +58,7 @@ public class Entity {
         }
         return angle;
     }
-    public int getFacingTextureID(Direction direction){
+  /*  public int getFacingTextureID(Direction direction){
         switch (direction) {
             case RIGHT:
                 return 0;
@@ -68,7 +70,7 @@ public class Entity {
                 return 6;
         }
         return 0;
-    }
+    } */
 
     public Rectangle getRectangle(){
         return new Rectangle(this.position, this.model.actual.size);
@@ -86,6 +88,48 @@ public class Entity {
 
     }
 
+    // animation stuff
+
+    public Animation currentAnimation;
+    public int currentFrame;
+    long time;
+    private long animationStart;
+    public int animationDuration = 0;
+    private boolean prioritySet;
+    public void setAnimation(String animation) {
+        if(prioritySet) return;
+        if(model.animations.get(animation) == currentAnimation) return;
+        currentAnimation = model.animations.get(animation);
+        if(currentAnimation == null) {
+            currentAnimation = model.animations.get("default");
+        }
+        prioritySet = currentAnimation.priority;
+        animationDuration = 0;
+        for (int i = 0; i < currentAnimation.timings.length; i++) {
+            animationDuration += currentAnimation.timings[i];
+        }
+        animationStart = System.currentTimeMillis();
+    }
+    public Texture getCurrentTexture() {
+        if(currentAnimation == null) {
+            setAnimation("default");
+        }
+        System.out.println(animationDuration);
+        time = (System.currentTimeMillis() - animationStart)%animationDuration;
+        currentFrame = 0;
+
+
+        for (int i = 0; i < currentAnimation.timings.length; i++) {
+
+            if(time < currentAnimation.timings[i] || currentAnimation.timings[i] == -1) {
+                currentFrame = currentAnimation.tiles[i];
+                break;
+            } else {
+                time -=currentAnimation.timings[i];
+            }
+        }
+        return model.res.textures[currentFrame];
+    }
 }
 
 
@@ -105,17 +149,16 @@ class Character extends Entity {
 class Knight extends Character {
     public Knight(Point point){
         super(point);
-        this.max_hp = 600;
-        this.hp = 600;
-        this.max_mp = 400;
-        this.mp = 400;
-        this.movementSpeed =1;
-        this.attackSpeed = 1500;
-        this.ad = 50;
-        this.ap = 0;
-        this.armor = 50;
-        this.magic_resistance = 50;
-
-
+        Stats stats = StatLoader.get("knight");
+        this.max_hp = stats.max_hp;
+        this.hp = stats.max_hp;
+        this.max_mp = stats.max_mp;
+        this.mp = stats.max_mp;
+        this.movementSpeed = stats.movementSpeed;
+        this.attackSpeed = stats.attackSpeed;
+        this.ad = stats.ad;
+        this.ap = stats.ap;
+        this.armor = stats.armor;
+        this.magic_resistance = stats.magic_resistance;
     }
 }

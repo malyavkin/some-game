@@ -53,9 +53,6 @@ class FontLoader {
             int pos = chars.get(mapTo);
             chars.put(key, pos);
         }
-
-
-
         new ResourceLoader(
             "font",
             new Resources(
@@ -78,6 +75,55 @@ class ResourceLoader {
     }
 }
 
+class Stats{
+    public int max_hp;
+    public int max_mp;
+    public int movementSpeed;
+    public int attackSpeed;
+    public int ad;
+    public int ap;
+    public int armor;
+    public int magic_resistance;
+
+    public Stats(int max_hp, int max_mp, int movementSpeed, int attackSpeed, int ad, int ap, int armor, int magic_resistance) {
+        this.max_hp = max_hp;
+        this.max_mp = max_mp;
+        this.movementSpeed = movementSpeed;
+        this.attackSpeed = attackSpeed;
+        this.ad = ad;
+        this.ap = ap;
+        this.armor = armor;
+        this.magic_resistance = magic_resistance;
+    }
+}
+
+class StatLoader {
+    private static Map<String, Stats> statCache= new HashMap<>();
+    public StatLoader(String name, JSONObject jsonObject) {
+        Stats stats = new Stats(
+                ((Long)jsonObject.get("max_hp")).intValue(),
+                ((Long)jsonObject.get("max_mp")).intValue(),
+                ((Long)jsonObject.get("movementSpeed")).intValue(),
+                ((Long)jsonObject.get("attackSpeed")).intValue(),
+                ((Long)jsonObject.get("ad")).intValue(),
+                ((Long)jsonObject.get("ap")).intValue(),
+                ((Long)jsonObject.get("armor")).intValue(),
+                ((Long)jsonObject.get("magic_resistance")).intValue()
+        );
+        statCache.put(name, stats);
+
+
+    }
+    public static Stats get(String s) {
+        Stats stats = statCache.get(s);
+        if (stats == null) {
+            System.out.printf("No stats info exist for: " + s);
+        }
+        return stats;
+
+    }
+}
+
 class ModelLoader {
     private static Map<String, Model>  modelCache= new HashMap<>();
     public static Model get(String s) {
@@ -96,7 +142,7 @@ class ModelLoader {
 
         Resources resources = ResourceLoader.resCache.get(texture);
 
-        if (resources == null) {
+        if  (resources == null) {
             new ResourceLoader(
                 texture,
                 new Resources(
@@ -116,6 +162,37 @@ class ModelLoader {
                 ((Long) model_size.get(1)).intValue()
             )
         );
+        //animations
+        JSONObject animations = ((JSONObject) jsonObject.get("animations"));
+        String key;
+
+        boolean priority;
+        int[] timings;
+        int[] tiles;
+        JSONArray JSONTimings;
+        JSONArray JSONTiles;
+        JSONObject obj;
+        // = (JSONArray)jsonObject.get("frame_size");
+        for (Object o : animations.keySet()) {
+            key = (String) o;
+            obj = ((JSONObject) animations.get(key));
+
+            JSONTiles = (JSONArray)obj.get("tiles");
+            tiles = new int[JSONTiles.size()];
+            for (int i = 0; i < JSONTiles.size(); i++) {
+                tiles[i] = ((Long)JSONTiles.get(i)).intValue();
+            }
+
+            JSONTimings = (JSONArray)obj.get("timings");
+            timings = new int[JSONTimings.size()];
+            for (int i = 0; i < JSONTimings.size(); i++) {
+                timings[i] = ((Long)JSONTimings.get(i)).intValue();
+            }
+            priority = (boolean)obj.get("priority");
+
+            model.animations.put(key, new Animation(key, priority, timings, tiles));
+        }
+
         modelCache.put(name, model);
 
     }

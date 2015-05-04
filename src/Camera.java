@@ -103,7 +103,8 @@ public class Camera {
             squareLocation = toGlobal(world.heroes.get(i).position.sub(world.heroes.get(i).model.actual.position));
             // ???????
             squareLocation= squareLocation.mul(this.tileZoom);
-            Texture t = world.heroes.get(i).model.res.textures[world.heroes.get(i).getFacingTextureID(world.heroes.get(i).facing)];
+            Texture t = world.heroes.get(i).getCurrentTexture();
+            //Texture t = world.heroes.get(i).model.res.textures[world.heroes.get(i).getFacingTextureID(world.heroes.get(i).facing)];
             DrawShit.shittySquare(squareLocation, world.heroes.get(i).model.res.size.mul(this.tileZoom), t);
 
         }

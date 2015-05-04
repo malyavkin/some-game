@@ -1,7 +1,111 @@
 {
-  "texture": "res/knight.png",
-  "frame_size" : [32,32],
-  "origin" : [12,13],
-  "model_size" : [8,8]
+  "model" : {
+    "texture": "res/knight.png",
+    "frame_size" : [32,32],
+    "origin" : [12,13],
+    "model_size" : [8,8],
+    "animations" : {
+      "default" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [6]
+      },
+      "IDLE_RIGHT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [0]
+      },
+      "IDLE_UP_RIGHT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [1]
+      },
+      "IDLE_UP" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [2]
+      },
+      "IDLE_UP_LEFT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [3]
+      },
+      "IDLE_LEFT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [4]
+      },
+      "IDLE_DOWN_LEFT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [5]
+      },
+      "IDLE_DOWN" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [6]
+      },
+      "IDLE_DOWN_RIGHT" : {
+        "priority" : false,
+        "timings" :  [-1],
+        "tiles" : [7]
+      },
+      "WALKING_RIGHT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [10,20]
+      },
+      "WALKING_UP_RIGHT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [11,21]
+      },
+      "WALKING_UP" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [12,22]
+      },
+      "WALKING_UP_LEFT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [13,23]
+      },
+      "WALKING_LEFT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [14,24]
+      },
+      "WALKING_DOWN_LEFT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [15,25]
+      },
+      "WALKING_DOWN" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [16,26]
+      },
+      "WALKING_DOWN_RIGHT" : {
+        "priority" : false,
+        "timings" :  [125,125],
+        "tiles" : [17,27]
+      }
 
+
+
+    }
+  },
+  "stats" : {
+    "max_hp" : 600,
+    "max_mp" : 400,
+    "movementSpeed" : 1,
+    "attackSpeed" : 1500,
+    "ad" : 50,
+    "ap" : 0,
+    "armor" : 50,
+    "magic_resistance" : 50
+  }
+  
 }
+
+

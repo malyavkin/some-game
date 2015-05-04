@@ -253,6 +253,7 @@ public class Controller {
         if(d > 0) {
             if(entity == this.anchor) {
                 movePoint(camera.position, direction, d);
+                entity.setAnimation("WALKING_"+direction);
             }
             movePoint(entity.position, direction, d);
         }
@@ -270,25 +271,19 @@ public class Controller {
         return list;
 
     }
-    /*public void basicAttack(Entity entity) {
-        try {
-            basicAttack(((Character) entity));
-        } catch (Exception x) {x.getCause();}
-
-    }*/
-
-
     public void basicAttack(Entity character) {
         ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());
         for (Entity enemy : enemies) {
             enemy.hp -= character.ad;
             if (enemy.hp <=0) {
                 world.heroes.remove(enemy);
-
-
             }
             System.out.println(enemy.hp + "/" + enemy.max_hp + "hp");
         }
     }
+
+}
+
+class InputManager {
 
 }

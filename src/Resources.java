@@ -5,13 +5,16 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 class Model {
     Resources res;
     Rectangle actual;
-    //Point origin;
-    //Point size;
-    int[] mapping;
+    Map<String, Animation> animations = new HashMap<>();
+
+    //animation state
+
 
     /**
      * Model constructor.
@@ -23,6 +26,7 @@ class Model {
         this.res = res;
         this.actual = actual;
     }
+    //public initAnimations
 
 
 }

@@ -38,7 +38,8 @@ public class Main {
         new FontLoader(fontJSON);
         // loading knight model
         JSONObject knightJSON = ConfigLoader.getJSON("res/knight.json");
-        new ModelLoader("knight", knightJSON);
+        new ModelLoader("knight", (JSONObject)knightJSON.get("model"));
+        new StatLoader("knight",  (JSONObject)knightJSON.get("stats"));
         Model heroModel = ModelLoader.get("knight");
         //setting up the characters
         Knight hero = new Knight(new Point(80,70));
@@ -133,17 +134,16 @@ public class Main {
             lastDate2 = System.currentTimeMillis();
             DrawShit.clear();
             controller.draw();
-            camera.drawBorder(controller.getAnchor(),Color.Blue);
+            camera.drawBorder(controller.getAnchor(), Color.Blue);
 
             KeyboardLogic();
-            for (int i = 0; i < l.size(); i++) {
-                if(l.get(i) == controller.getAnchor()){
-                    Font.render("Hero :"+ l.get(i).hp + "/" + l.get(i).max_hp + " hp", new Point(160,16*(i+1)), 2, Color.Red);
-                } else {
-                    Font.render("Character "+i+":"+ l.get(i).hp + "/" + l.get(i).max_hp + " hp", new Point(160,16*(i+1)), 2, Color.Red);
-                }
 
-            }
+            Font.render("animation:"+ controller.getAnchor().currentAnimation.name , new Point(160, 16), 2, Color.Red);
+            Font.render("current_frame:"+ controller.getAnchor().currentFrame, new Point(160, 32), 2, Color.Red);
+            Font.render("time:"+ controller.getAnchor().time, new Point(160, 48), 2, Color.Red);
+            Font.render("animation duration:"+ controller.getAnchor().animationDuration, new Point(160, 64), 2, Color.Red);
+
+
             Font.render(last_fps + " fps ("+last_ms+" ms)", new Point(0, 704), 2, Color.Green);
             fpsCounter();
             Display.update();
