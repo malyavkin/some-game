@@ -1,3 +1,5 @@
+import org.lwjgl.input.Keyboard;
+
 import java.util.ArrayList;
 
 public class Controller {
@@ -284,6 +286,44 @@ public class Controller {
 
 }
 
+/**
+ *  8 1 2
+ *  7 0 3
+ *  6 5 4
+ */
 class InputManager {
+    private static boolean W = false;
+    private static boolean S = false;
+    private static boolean A = false;
+    private static boolean D = false;
+    private static boolean space = false;
+    public static Point getDirectionsFromInput(){
+        int horizontal = 0;
+        int vertical = 0;
+        Direction[] directions = new Direction[2];
+        if(W == S) {
+            vertical = 0;
+        } else if(S) {
+            vertical = 1;
+        } else {
+            vertical = -1;
+        }
 
+        if(A == D) {
+            horizontal = 0;
+        } else if (A) {
+            horizontal = -1;
+        } else {
+            horizontal = 1;
+        }
+        return new Point(horizontal,vertical);
+    }
+    public static void update() {
+        W = Keyboard.isKeyDown(Keyboard.KEY_W);
+        A = Keyboard.isKeyDown(Keyboard.KEY_A);
+        S = Keyboard.isKeyDown(Keyboard.KEY_S);
+        D = Keyboard.isKeyDown(Keyboard.KEY_D);
+        space = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
+
+    }
 }
