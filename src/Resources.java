@@ -33,7 +33,7 @@ class Model {
 
 public class Resources {
     public Texture[] textures;
-    public Point size = new Point(0,0);
+    public Point size = new Point();
 
     private BufferedImage[] sliceSprites(BufferedImage img, int w, int h) {
 

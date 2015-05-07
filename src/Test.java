@@ -3,7 +3,7 @@ import java.util.*;
 public class Test {
     public static void main(String[] args) {
         Rectangle one = new Rectangle(0,0,10,10), two;
-        Point point = new Point(0,0);
+        Point point = new Point();
         System.out.println("hasInside tests");
 
 

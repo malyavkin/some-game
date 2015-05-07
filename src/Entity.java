@@ -1,9 +1,18 @@
 import org.newdawn.slick.opengl.Texture;
 
+/**
+ *  Facing:
+ *  8   1   2
+ *    \ | /
+ *  7 - 0 - 3
+ *    / | \
+ *  6   5   4
+ */
+
 public class Entity {
     // position in px
-    public Point position = new Point(0,0);
-    public Direction facing = Direction.DOWN;
+    public Point position = new Point();
+    public int facing = 5;
     public Model model;
     public Entity(Point position) {
         this.position = position;
@@ -58,19 +67,7 @@ public class Entity {
         }
         return angle;
     }
-  /*  public int getFacingTextureID(Direction direction){
-        switch (direction) {
-            case RIGHT:
-                return 0;
-            case UP:
-                return 2;
-            case LEFT:
-                return 4;
-            case DOWN:
-                return 6;
-        }
-        return 0;
-    } */
+
 
     public Rectangle getRectangle(){
         return new Rectangle(this.position, this.model.actual.size);
@@ -114,7 +111,7 @@ public class Entity {
         if(currentAnimation == null) {
             setAnimation("default");
         }
-        System.out.println(animationDuration);
+        //System.out.println(animationDuration);
         time = (System.currentTimeMillis() - animationStart)%animationDuration;
         currentFrame = 0;
 
@@ -142,7 +139,7 @@ class Character extends Entity {
         // this is model position
         return this.getRectangle()
                 // move it to the facing direction
-                .move(Point.fromDirection(this.facing).mul(this.model.actual.size));
+                .move(InputManager.getPointFrom8way(facing).mul(this.model.actual.size));
     }
 }
 

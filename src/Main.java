@@ -82,27 +82,22 @@ public class Main {
 
     public static void KeyboardLogic() {
         // direction
+        InputManager.update();
+        Font.render("input:" + InputManager.get8wayFromInput(), new Point(160, 16*6), 2, Color.Green);
+        controller.moveFrom8way(controller.getAnchor(), InputManager.get8wayFromInput());
+
+                camera.drawRectangle(controller.getAnchor().getBasicAttackArea(), Color.Red);
         if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-            controller.move(controller.getAnchor(), Direction.UP);
-            controller.getAnchor().facing = Direction.UP;
-            // this stuff is just for testing, please ignore
+
             DrawShit.shittySquare((8+1)*4,0,32,32, wasd.textures[0]);
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-            controller.move(controller.getAnchor(), Direction.LEFT);
-            controller.getAnchor().facing = Direction.LEFT;
-
             DrawShit.shittySquare(0,((8)+1)*4,32,32, wasd.textures[1]);
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-            controller.move(controller.getAnchor(), Direction.DOWN);
-            controller.getAnchor().facing = Direction.DOWN;
             DrawShit.shittySquare(((8)+1)*4,((2*8)+2)*4,32,32, wasd.textures[2]);
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-            controller.move(controller.getAnchor(), Direction.RIGHT);
-            controller.getAnchor().facing = Direction.RIGHT;
-
             DrawShit.shittySquare(((2*8)+2)*4,((8)+1)*4,32,32, wasd.textures[3]);
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){

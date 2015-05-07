@@ -1,6 +1,7 @@
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Controller {
 
@@ -27,7 +28,7 @@ public class Controller {
     }
     public Point getCurrentTile(Point px) {
         Point tmp = px.same();
-        Point out = new Point(0,0);
+        Point out = new Point();
 
         while (tmp.x < 0) {
             out.x --;
@@ -244,7 +245,67 @@ public class Controller {
         return rayEntities_getReturnValue(bestValue, point, direction);
     }
 
+
+    private Direction getHorizontalFrom8way(int value){
+        switch (value) {
+            case 8 :
+            case 7 :
+            case 6 :
+                return Direction.LEFT;
+
+            case 2 :
+            case 3 :
+            case 4 :
+                return Direction.RIGHT;
+        }
+        return Direction.NONE;
+    }
+    private Direction getVerticalFrom8way(int value){
+        switch (value) {
+            case 8 :
+            case 1 :
+            case 2 :
+                return Direction.UP;
+            case 6 :
+            case 5 :
+            case 4 :
+                return Direction.DOWN;
+        }
+        return Direction.NONE;
+    }
+
+    public void moveFrom8way(Entity entity, int value) {
+
+        String state = value!=0?"WALKING":"IDLE";
+        int considerValue = value!=0?value:InputManager.getPrevious8way();
+        String verticalAnimationWord =getVerticalFrom8way(considerValue).toString();
+        String horizontalAnimationWord =getHorizontalFrom8way(considerValue).toString();
+
+
+        if(value != 0){
+            entity.facing = value;
+            move(entity, getVerticalFrom8way(considerValue));
+            move(entity, getHorizontalFrom8way(considerValue));
+        }
+
+
+
+        String animation = state;
+        if(!Objects.equals(verticalAnimationWord, "NONE")) {
+            animation += "_"+verticalAnimationWord;
+        }
+        if(!Objects.equals(horizontalAnimationWord, "NONE")) {
+            animation += "_"+horizontalAnimationWord ;
+        }
+        if(Objects.equals(verticalAnimationWord, "NONE") && Objects.equals(horizontalAnimationWord, "NONE")) {
+            animation = "default";
+        }
+        entity.setAnimation(animation);
+    }
+
     public void move(Entity entity, Direction direction) {
+        if(direction == Direction.NONE) return;
+
         int d = Math.min(ray(entity, direction), entity.movementSpeed);
         int d1 = rayEntities(entity, direction);
         if(d1 >= 0) {
@@ -255,7 +316,6 @@ public class Controller {
         if(d > 0) {
             if(entity == this.anchor) {
                 movePoint(camera.position, direction, d);
-                entity.setAnimation("WALKING_"+direction);
             }
             movePoint(entity.position, direction, d);
         }
@@ -297,9 +357,79 @@ class InputManager {
     private static boolean A = false;
     private static boolean D = false;
     private static boolean space = false;
+
+    public static int getPrevious8way() {
+        return previous8way;
+    }
+
+    private static int previous8way = 0;
+    private static int lastReturned8way = 0;
+
+    public static int get8wayFromInput(){
+        int horizontal;
+        int vertical;
+        int[][] values = {
+                {8,1,2},
+                {7,0,3},
+                {6,5,4}
+        };
+        if(W == S) {
+            vertical = 1;
+        } else if(S) {
+            vertical = 2;
+        } else {
+            vertical = 0;
+        }
+
+        if(A == D) {
+            horizontal = 1;
+        } else if (A) {
+            horizontal = 0;
+        } else {
+            horizontal = 2;
+        }
+
+        if(lastReturned8way != values[vertical][horizontal]){
+            previous8way = lastReturned8way;
+            lastReturned8way = values[vertical][horizontal];
+        }
+
+        return values[vertical][horizontal];
+
+    }
+    public static Point getPointFrom8way(int value){
+        Point point = new Point();
+        switch (value) {
+            case 8 :
+            case 1 :
+            case 2 :
+                point.y = -1;
+                break;
+            case 6 :
+            case 5 :
+            case 4 :
+                point.y = 1;
+                break;
+
+        }
+        switch (value) {
+            case 8 :
+            case 7 :
+            case 6 :
+                point.x= -1;
+                break;
+            case 2 :
+            case 3 :
+            case 4 :
+                point.x= 1;
+                break;
+
+        }
+        return point;
+    }
     public static Point getDirectionsFromInput(){
-        int horizontal = 0;
-        int vertical = 0;
+        int horizontal;
+        int vertical;
         Direction[] directions = new Direction[2];
         if(W == S) {
             vertical = 0;

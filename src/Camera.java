@@ -67,7 +67,7 @@ public class Camera {
 
     public void draw(World world){
         // tile position in the grid. NOT IN PIXELS. IN TILES;
-        Point tilePos = new Point(0,0);
+        Point tilePos = new Point();
         // size of a tile in pixels
         Point real =world.map.theme.size.mul(this.tileZoom);
 

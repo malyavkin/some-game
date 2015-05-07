@@ -6,6 +6,9 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawShit {
 
+    public static void shittySquare(Rectangle rectangle, Color color) {
+        shittySquare(rectangle.position.x, rectangle.position.y, rectangle.size.x, rectangle.size.y, color);
+    }
     public static void shittySquare(Point position, Point size, Texture t) {
         shittySquare(position.x, position.y, size.x, size.y, t);
     }

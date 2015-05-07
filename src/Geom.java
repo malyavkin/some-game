@@ -84,7 +84,7 @@ class Rectangle {
 }
 
 enum Direction {
-    UP, RIGHT, DOWN, LEFT
+    UP, RIGHT, DOWN, LEFT, NONE
 }
 
 class Point {
@@ -93,6 +93,10 @@ class Point {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+    public Point() {
+        this.x = 0;
+        this.y = 0;
     }
     public Point add(Point p) {
         return new Point(this.x + p.x, this.y + p.y);
@@ -140,7 +144,22 @@ class Point {
                 return left;
 
         }
-        return new Point(0,0);
+        return new Point();
+    }
+
+    public static Point from8way(Direction direction) {
+        switch (direction){
+            case UP:
+                return up;
+            case RIGHT:
+                return right;
+            case DOWN:
+                return down;
+            case LEFT:
+                return left;
+
+        }
+        return new Point();
     }
 
 }
