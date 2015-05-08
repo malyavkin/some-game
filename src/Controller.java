@@ -273,13 +273,24 @@ public class Controller {
         }
         return Direction.NONE;
     }
+    private String getStringDirectionFrom8way(int value){
+        String string="";
+        String verticalAnimationWord =getVerticalFrom8way(value).toString();
+        String horizontalAnimationWord =getHorizontalFrom8way(value).toString();
+        if(!Objects.equals(verticalAnimationWord, "NONE")) {
+            string += "_"+verticalAnimationWord;
+        }
+        if(!Objects.equals(horizontalAnimationWord, "NONE")) {
+            string += "_"+horizontalAnimationWord ;
+        }
 
+        return string;
+    }
     public void moveFrom8way(Entity entity, int value) {
 
         String state = value!=0?"WALKING":"IDLE";
         int considerValue = value!=0?value:InputManager.getPrevious8way();
-        String verticalAnimationWord =getVerticalFrom8way(considerValue).toString();
-        String horizontalAnimationWord =getHorizontalFrom8way(considerValue).toString();
+
 
 
         if(value != 0){
@@ -291,14 +302,11 @@ public class Controller {
 
 
         String animation = state;
-        if(!Objects.equals(verticalAnimationWord, "NONE")) {
-            animation += "_"+verticalAnimationWord;
-        }
-        if(!Objects.equals(horizontalAnimationWord, "NONE")) {
-            animation += "_"+horizontalAnimationWord ;
-        }
-        if(Objects.equals(verticalAnimationWord, "NONE") && Objects.equals(horizontalAnimationWord, "NONE")) {
+        String direction = getStringDirectionFrom8way(considerValue);
+        if(direction.equals("")){
             animation = "default";
+        } else {
+            animation += direction;
         }
         entity.setAnimation(animation);
     }
@@ -334,6 +342,7 @@ public class Controller {
 
     }
     public void basicAttack(Entity character) {
+        character.setAnimation("ATTACK"+getStringDirectionFrom8way(character.facing));
         ArrayList<Entity> enemies = queryEntities(character.getBasicAttackArea());
         for (Entity enemy : enemies) {
             enemy.hp -= character.ad;

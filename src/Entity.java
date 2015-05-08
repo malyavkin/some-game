@@ -112,7 +112,12 @@ public class Entity {
             setAnimation("default");
         }
         //System.out.println(animationDuration);
-        time = (System.currentTimeMillis() - animationStart)%animationDuration;
+        time = (System.currentTimeMillis() - animationStart);
+        if(time > animationDuration){
+            time %=animationDuration;
+            prioritySet = false;
+        }
+
         currentFrame = 0;
 
 

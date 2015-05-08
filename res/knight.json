@@ -50,6 +50,8 @@
         "timings" :  [-1],
         "tiles" : [7]
       },
+
+
       "WALKING_RIGHT" : {
         "priority" : false,
         "timings" :  [125,125],
@@ -89,6 +91,47 @@
         "priority" : false,
         "timings" :  [125,125],
         "tiles" : [17,27]
+      },
+
+      "ATTACK_RIGHT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [30,40]
+      },
+      "ATTACK_UP_RIGHT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [31,41]
+      },
+      "ATTACK_UP" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [32,42]
+      },
+      "ATTACK_UP_LEFT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [33,43]
+      },
+      "ATTACK_LEFT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [34,44]
+      },
+      "ATTACK_DOWN_LEFT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [35,45]
+      },
+      "ATTACK_DOWN" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [36,46]
+      },
+      "ATTACK_DOWN_RIGHT" : {
+        "priority" : true,
+        "timings" :  [125,125],
+        "tiles" : [37,47]
       }
 
 
