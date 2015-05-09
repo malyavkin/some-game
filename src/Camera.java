@@ -34,7 +34,7 @@ public class Camera {
     }
 
     private Point toGlobal (Point relative) {
-        return relative.sub(this.position).add(stage);
+        return relative.sub(this.position).add(this.stage.div(this.tileZoom));
     }
 
     public void centerTo (Entity entity) {
@@ -57,10 +57,12 @@ public class Camera {
             drawPoint(entity.getAngle(i), color);
         }
     }
-
+    public Point toLocal(Point point) {
+        return  new Point();
+    }
     public void drawPoint(Point point, Color color) {
         Point squareLocation;
-        squareLocation = point.sub(this.position).mul(this.tileZoom).add(stage);
+        squareLocation = point.sub(this.position).mul(this.tileZoom).add(this.stage);
         DrawShit.shittySquare(squareLocation.x, squareLocation.y, this.tileZoom, this.tileZoom, color);
 
     }
@@ -72,7 +74,7 @@ public class Camera {
         Point real =world.map.theme.size.mul(this.tileZoom);
 
         Point squareLocation;
-
+        Entity entity;
 
         for (int i = 0; i < world.map.levelData.length; i++) {
             tilePos.x = i%world.map.w;
@@ -83,7 +85,7 @@ public class Camera {
             boolean d = isVisible(tileRec);
 
             if(d) {
-                squareLocation = tilePos.mul(world.map.theme.size).sub(this.position).mul(this.tileZoom).add(stage);
+                squareLocation = tilePos.mul(world.map.theme.size).sub(this.position).mul(this.tileZoom).add(this.stage);
                 DrawShit.shittySquare(squareLocation, real, world.map.theme.textures[world.map.levelData[i].type]);
             }
         }
@@ -96,16 +98,14 @@ public class Camera {
             return r1.position.y + r1.size.y - r2.position.y - r2.size.y;
         });
         for (int i = 0; i < world.heroes.size(); i++) {
-
-            if(world.heroes.get(i).hp <= 0) continue;
+            entity =world.heroes.get(i);
 
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
-            squareLocation = toGlobal(world.heroes.get(i).position.sub(world.heroes.get(i).model.actual.position));
+            squareLocation = toGlobal(entity.position.sub(entity.model.actual.position));
             // ???????
             squareLocation= squareLocation.mul(this.tileZoom);
-            Texture t = world.heroes.get(i).getCurrentTexture();
-            //Texture t = world.heroes.get(i).model.res.textures[world.heroes.get(i).getFacingTextureID(world.heroes.get(i).facing)];
-            DrawShit.shittySquare(squareLocation, world.heroes.get(i).model.res.size.mul(this.tileZoom), t);
+            Texture t = entity.getCurrentTexture();
+            DrawShit.shittySquare(squareLocation, entity.model.res.size.mul(this.tileZoom), t);
 
         }
 

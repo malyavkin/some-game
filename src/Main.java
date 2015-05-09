@@ -1,5 +1,6 @@
 import org.json.simple.JSONObject;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.LWJGLException;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 
 
 public class Main {
-
+    static Mouse mouse;
     static World world;
     static Camera camera;
     static long lastDate = System.currentTimeMillis();
@@ -60,7 +61,7 @@ public class Main {
 
         // creating view
 
-        camera = new Camera(new Point(0,0), 1280, 720, new Point(0,0));
+        camera = new Camera(new Point(0,0), 1280, 720, new Point(64,64));
 
         // finalizing
 
@@ -83,10 +84,8 @@ public class Main {
     public static void KeyboardLogic() {
         // direction
         InputManager.update();
-        Font.render("input:" + InputManager.get8wayFromInput(), new Point(160, 16*6), 2, Color.Green);
+        Font.render("input:" + InputManager.get8wayFromInput(), new Point(160, 16 * 6), 2, Color.Green);
         controller.moveFrom8way(controller.getAnchor(), InputManager.get8wayFromInput());
-
-                camera.drawRectangle(controller.getAnchor().getBasicAttackArea(), Color.Red);
         if(Keyboard.isKeyDown(Keyboard.KEY_W)){
 
             DrawShit.shittySquare((8+1)*4,0,32,32, wasd.textures[0]);
@@ -129,17 +128,21 @@ public class Main {
             lastDate2 = System.currentTimeMillis();
             DrawShit.clear();
             controller.draw();
-            camera.drawBorder(controller.getAnchor(), Color.Blue);
+            camera.drawRectangle(controller.getAnchor().getBasicAttackArea(), Color.Red);
+
+
+            for (int i = 0; i < world.heroes.size(); i++) {
+                camera.drawBorder(world.heroes.get(i), Color.Blue);
+            }
 
             KeyboardLogic();
 
-            Font.render("animation:"+ controller.getAnchor().currentAnimation.name , new Point(160, 16), 2, Color.Red);
+            Font.render("animation:" + controller.getAnchor().currentAnimation.name, new Point(160, 16), 2, Color.Red);
             Font.render("current_frame:"+ controller.getAnchor().currentFrame, new Point(160, 32), 2, Color.Red);
             Font.render("time:"+ controller.getAnchor().time, new Point(160, 48), 2, Color.Red);
             Font.render("animation duration:"+ controller.getAnchor().animationDuration, new Point(160, 64), 2, Color.Red);
-
-
-            Font.render(last_fps + " fps ("+last_ms+" ms)", new Point(0, 704), 2, Color.Green);
+            Font.render(last_fps + " fps ("+last_ms+" ms)", new Point(0, 712), 1, Color.Green);
+            System.out.println(Mouse.getX());
             fpsCounter();
             Display.update();
 

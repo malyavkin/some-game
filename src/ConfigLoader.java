@@ -166,7 +166,7 @@ class ModelLoader {
         JSONObject animations = ((JSONObject) jsonObject.get("animations"));
         String key;
 
-        boolean priority;
+        boolean interrupting;
         int[] timings;
         int[] tiles;
         JSONArray JSONTimings;
@@ -188,9 +188,9 @@ class ModelLoader {
             for (int i = 0; i < JSONTimings.size(); i++) {
                 timings[i] = ((Long)JSONTimings.get(i)).intValue();
             }
-            priority = (boolean)obj.get("priority");
+            interrupting = (boolean)obj.get("interrupting");
 
-            model.animations.put(key, new Animation(key, priority, timings, tiles));
+            model.animations.put(key, new Animation(key, interrupting, timings, tiles));
         }
 
         modelCache.put(name, model);

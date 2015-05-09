@@ -88,47 +88,60 @@ public class Entity {
     // animation stuff
 
     public Animation currentAnimation;
+    public String fallbackAnimation;
     public int currentFrame;
-    long time;
+    public long time;
     private long animationStart;
     public int animationDuration = 0;
-    private boolean prioritySet;
+
+
     public void setAnimation(String animation) {
-        if(prioritySet) return;
+        // don't need to set this more
         if(model.animations.get(animation) == currentAnimation) return;
-        currentAnimation = model.animations.get(animation);
-        if(currentAnimation == null) {
-            currentAnimation = model.animations.get("default");
+
+        // getting animation from storage
+        Animation requestedAnimation = model.animations.get(animation);
+        if(requestedAnimation == null) {
+            requestedAnimation = model.animations.get("default");
         }
-        prioritySet = currentAnimation.priority;
-        animationDuration = 0;
-        for (int i = 0; i < currentAnimation.timings.length; i++) {
-            animationDuration += currentAnimation.timings[i];
+
+        // if there is an interruption animation playing
+        if(currentAnimation!=null && currentAnimation.interrupting && System.currentTimeMillis() < animationDuration+animationStart){
+            fallbackAnimation = requestedAnimation.name;
+        } else {
+            currentAnimation = requestedAnimation;
+
+            animationDuration = 0;
+            for (int i = 0; i < currentAnimation.timings.length; i++) {
+                animationDuration += currentAnimation.timings[i];
+            }
+            animationStart = System.currentTimeMillis();
         }
-        animationStart = System.currentTimeMillis();
+
+        //setup
+
     }
     public Texture getCurrentTexture() {
         if(currentAnimation == null) {
             setAnimation("default");
         }
-        //System.out.println(animationDuration);
-        time = (System.currentTimeMillis() - animationStart);
-        if(time > animationDuration){
-            time %=animationDuration;
-            prioritySet = false;
+        if(currentAnimation.interrupting && System.currentTimeMillis() >= animationDuration+animationStart){
+            setAnimation(fallbackAnimation);
         }
-
-        currentFrame = 0;
-
-
+        time = (System.currentTimeMillis() - animationStart);
+        long time1 = time%animationDuration;
+        currentFrame = -1;
         for (int i = 0; i < currentAnimation.timings.length; i++) {
 
-            if(time < currentAnimation.timings[i] || currentAnimation.timings[i] == -1) {
+            if(time1 < currentAnimation.timings[i] || currentAnimation.timings[i] == -1) {
                 currentFrame = currentAnimation.tiles[i];
                 break;
             } else {
-                time -=currentAnimation.timings[i];
+                time1 -=currentAnimation.timings[i];
             }
+        }
+        if(currentFrame == -1) {
+            System.out.println("wtf? currentFrame == -1");
         }
         return model.res.textures[currentFrame];
     }
