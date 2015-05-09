@@ -61,7 +61,7 @@ public class Main {
 
         // creating view
 
-        camera = new Camera(new Point(0,0), 1280, 720, new Point(64,64));
+        camera = new Camera(new Point(0,0), 1280, 720, new Point(0,0));
 
         // finalizing
 
@@ -135,14 +135,14 @@ public class Main {
                 camera.drawBorder(world.heroes.get(i), Color.Blue);
             }
 
+            camera.drawPoint(camera.toLocal(new Point(Mouse.getX(), Display.getHeight() - Mouse.getY())), Color.White);
             KeyboardLogic();
 
             Font.render("animation:" + controller.getAnchor().currentAnimation.name, new Point(160, 16), 2, Color.Red);
             Font.render("current_frame:"+ controller.getAnchor().currentFrame, new Point(160, 32), 2, Color.Red);
             Font.render("time:"+ controller.getAnchor().time, new Point(160, 48), 2, Color.Red);
             Font.render("animation duration:"+ controller.getAnchor().animationDuration, new Point(160, 64), 2, Color.Red);
-            Font.render(last_fps + " fps ("+last_ms+" ms)", new Point(0, 712), 1, Color.Green);
-            System.out.println(Mouse.getX());
+            Font.render(last_fps + " fps (" + last_ms + " ms)", new Point(0, 712), 1, Color.Green);
             fpsCounter();
             Display.update();
 

@@ -34,7 +34,10 @@ public class Camera {
     }
 
     private Point toGlobal (Point relative) {
-        return relative.sub(this.position).add(this.stage.div(this.tileZoom));
+        return relative
+                .sub(this.position)
+                .mul(this.tileZoom)
+                .add(this.stage);
     }
 
     public void centerTo (Entity entity) {
@@ -58,7 +61,14 @@ public class Camera {
         }
     }
     public Point toLocal(Point point) {
-        return  new Point();
+        return point
+                .sub(this.stage)
+                .div(this.tileZoom)
+                .add(this.position);
+                /*
+                .sub(this.position)
+                .mul(this.tileZoom)
+                .add(this.stage);*/
     }
     public void drawPoint(Point point, Color color) {
         Point squareLocation;
@@ -101,9 +111,14 @@ public class Camera {
             entity =world.heroes.get(i);
 
             // ?????????? ?????????? ???????? (???????? ?? origin ?????? ? ?????? ????????, ????? ? ?????? ?????????)
-            squareLocation = toGlobal(entity.position.sub(entity.model.actual.position));
+
+            squareLocation = toGlobal(
+                    entity.position
+                    .sub(entity.model.actual.position)
+            );
+
             // ???????
-            squareLocation= squareLocation.mul(this.tileZoom);
+
             Texture t = entity.getCurrentTexture();
             DrawShit.shittySquare(squareLocation, entity.model.res.size.mul(this.tileZoom), t);
 
