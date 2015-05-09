@@ -6,131 +6,131 @@
     "model_size" : [8,8],
     "animations" : {
       "default" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [6]
       },
       "IDLE_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [0]
       },
       "IDLE_UP_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [1]
       },
       "IDLE_UP" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [2]
       },
       "IDLE_UP_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [3]
       },
       "IDLE_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [4]
       },
       "IDLE_DOWN_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [5]
       },
       "IDLE_DOWN" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [6]
       },
       "IDLE_DOWN_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [-1],
         "tiles" : [7]
       },
 
 
       "WALKING_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [10,20]
       },
       "WALKING_UP_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [11,21]
       },
       "WALKING_UP" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [12,22]
       },
       "WALKING_UP_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [13,23]
       },
       "WALKING_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [14,24]
       },
       "WALKING_DOWN_LEFT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [15,25]
       },
       "WALKING_DOWN" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [16,26]
       },
       "WALKING_DOWN_RIGHT" : {
-        "priority" : false,
+        "interrupting" : false,
         "timings" :  [125,125],
         "tiles" : [17,27]
       },
 
       "ATTACK_RIGHT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [30,40]
       },
       "ATTACK_UP_RIGHT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [31,41]
       },
       "ATTACK_UP" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [32,42]
       },
       "ATTACK_UP_LEFT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [33,43]
       },
       "ATTACK_LEFT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [34,44]
       },
       "ATTACK_DOWN_LEFT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [35,45]
       },
       "ATTACK_DOWN" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [36,46]
       },
       "ATTACK_DOWN_RIGHT" : {
-        "priority" : true,
-        "timings" :  [125,125],
+        "interrupting" : true,
+        "timings" :  [50,50],
         "tiles" : [37,47]
       }
 
