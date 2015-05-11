@@ -1,9 +1,9 @@
-import java.util.*;
-
 public class Test {
-    public static void main(String[] args) {
+    static Map map;
+    static RouteBuilder routeBuilder;
+    public static void hasinside(){
         Rectangle one = new Rectangle(0,0,10,10), two;
-        Point point = new Point();
+
         System.out.println("hasInside tests");
 
 
@@ -86,7 +86,142 @@ public class Test {
         System.out.println("test 13 " + one.intersects(two));
         System.out.println("test 13 " + two.intersects(one));
 
+    }
+    public static void tiles(){
+        System.out.println("free tiles test");
 
+        map =new Map(
+                new int[][]
+                        {
+                                {0,0,0},
+                                {1,1,0},
+                                {0,1,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 1: 1");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1,1))));
+
+        map =new Map(
+                new int[][]
+                        {
+                                {0,1,0},
+                                {1,1,0},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 2: 3");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+        map =new Map(
+                new int[][]
+                        {
+                                {0,1,0},
+                                {0,1,1},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 3: 5");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+        map =new Map(
+                new int[][]
+                        {
+                                {0,0,0},
+                                {0,1,1},
+                                {0,1,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 4: 7");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+        map =new Map(
+                new int[][]
+                        {
+                                {1,0,1},
+                                {0,1,1},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 5: 5");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+
+        map =new Map(
+                new int[][]
+                        {
+                                {0,1,0},
+                                {0,1,0},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 6: 3,5");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+
+        map =new Map(
+                new int[][]
+                        {
+                                {0,0,0},
+                                {0,1,0},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 7: 1,3,5,7");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+        map =new Map(
+                new int[][]
+                        {
+                                {1,0,1},
+                                {0,1,0},
+                                {0,0,0}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 8: 3,5");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1,1))));
+        map =new Map(
+                new int[][]
+                        {
+                                {1,0,1},
+                                {0,1,0},
+                                {0,0,1}},
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 9: none");
+        System.out.println(routeBuilder.angles2(routeBuilder.getSurroundings(new Point(1, 1))));
+    }
+    public static void main(String[] args) {
+
+
+
+        System.out.println("fullmap test");
+
+
+        map =new Map(
+                new int[][]
+                        {
+                                {0,0,0,0,0,0,0,0,0,0,0,0},
+                                {0,1,1,1,0,1,1,1,1,1,1,0},
+                                {0,1,1,1,0,1,1,1,1,1,1,0},
+                                {0,1,0,0,0,1,1,0,0,0,0,0},
+                                {0,1,0,0,0,1,1,0,0,0,0,0},
+                                {0,1,0,0,0,0,0,0,0,1,1,0},
+                                {0,1,1,1,1,0,0,0,0,1,1,0},
+                                {0,1,1,1,1,1,0,1,1,1,1,0},
+                                {0,1,1,1,1,1,0,1,1,1,1,0},
+                                {0,0,0,0,0,0,0,0,0,0,0,0}
+
+
+                        },
+                new int[]{TileType.GROUND, TileType.WALL}
+        );
+        routeBuilder = new RouteBuilder(map);
+        System.out.println("test 1:");
+        routeBuilder.print();
 
     }
 }

@@ -18,6 +18,20 @@ class Map {
         this.w = w;
         this.h = h;
     }
+
+    public Map(int[][]lvl, int[] types) {
+        levelData = new Tile[lvl.length*lvl[0].length];
+        for (int i = 0; i < lvl.length; i++) {
+            for (int j = 0; j < lvl[0].length; j++) {
+                levelData[i*lvl[0].length+j] = new Tile(types[lvl[i][j]]);
+            }
+        }
+        this.w = lvl[0].length;
+        this.h = lvl.length;
+    }
+    public Point getXY (int i){
+        return new Point(i%this.w, i/this.w);
+    }
     public Tile getTile(Point position) {
         if (position.y >=0 &&
             position.y < this.h &&
