@@ -1,3 +1,5 @@
+package rip.dfg;
+
 import java.util.ArrayList;
 public class World {
     public Map map;

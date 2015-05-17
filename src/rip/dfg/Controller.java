@@ -1,3 +1,5 @@
+package rip.dfg;
+
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;

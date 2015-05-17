@@ -1,3 +1,4 @@
+package rip.dfg;
 class Animation {
     boolean interrupting;
     int[] timings;

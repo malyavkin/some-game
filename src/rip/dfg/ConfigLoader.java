@@ -1,3 +1,4 @@
+package rip.dfg;
 import java.io.FileReader;
 import java.lang.*;
 import java.util.HashMap;

@@ -1,3 +1,4 @@
+package rip.dfg;
 import org.newdawn.slick.opengl.Texture;
 
 /**

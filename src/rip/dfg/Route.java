@@ -1,11 +1,16 @@
-import java.util.ArrayList;
+package rip.dfg;
+import java.util.*;
 
 
 public class Route {
+
 }
 
 class RouteBuilder {
-    Map map;
+    private Map map;
+    private ArrayList<DoubleRectangle> blocks = new ArrayList<>();
+    private ArrayList<DoublePoint> wayPoints = new ArrayList<>();
+    private Graph<Point> graph;
     public RouteBuilder(Map map) {
         this.map = map;
     }
@@ -43,9 +48,7 @@ class RouteBuilder {
                 map.getTile(getOffsetFrom8way(point,7))
         };
     }
-
-
-    ArrayList<Integer> angles2(Tile[] tiles) {
+    public ArrayList<Integer> angles2(Tile[] tiles) {
         int len = tiles.length;
         boolean[] spaces = new boolean[len];
         for (int i = 0; i < len; i++) {
@@ -92,7 +95,7 @@ class RouteBuilder {
         return angles;
 
     }
-    public void print(){
+    /*private void print(){
         boolean [] wp= getWayPoints();
         for (int i = 0; i < wp.length; i++) {
             if (i%map.w == 0) {
@@ -102,9 +105,10 @@ class RouteBuilder {
             System.out.print(wp[i]? "+" : map.levelData[i].canCollide()?"#":" ");
 
         }
-    }
-    boolean [] getWayPoints(){
-        boolean[] wp = new boolean[map.levelData.length];
+    }*/
+    public HashSet<Point> getWayPoints(){
+        HashSet<Point> wp= new HashSet<>();
+        //boolean[] wp = new boolean[map.levelData.length];
         for (int i = 0; i < map.levelData.length; i++) {
             Tile tile = map.levelData[i];
             if(tile.canCollide()){
@@ -112,11 +116,45 @@ class RouteBuilder {
                 ArrayList<Integer> angles = angles2(getSurroundings(XY));
                 for (Integer angle : angles) {
                     Point anglePos = getOffsetFrom8way(XY, angle);
-                    wp[anglePos.y * map.w + anglePos.x] = true;
+                    wp.add(new Point(anglePos.x, anglePos.y));
+
+
                 }
             }
         }
         return wp;
     }
+    public HashSet<DoublePoint> waypointsVisibleFrom(DoublePoint doublePoint) {
+        HashSet<DoublePoint> visibles = new HashSet<>();
+        for(DoublePoint doublePoint2 : wayPoints){
+            if(doublePoint != doublePoint2) {
+                if(!Geom.doIntersect(doublePoint, doublePoint2,blocks)) {
+                    visibles.add(doublePoint2);
+                }
+            }
+        }
+        return visibles;
 
+    }
+    public void buildGraph(){
+        graph = new Graph<>();
+        HashSet<Point> wayPointCells= getWayPoints();
+        for (Point p : wayPointCells) {
+            this.wayPoints.add(new DoublePoint(p));
+        }
+        for (int i = 0; i < map.levelData.length; i++) {
+            if(map.levelData[i].canCollide()) {
+                Point point = map.getXY(i);
+                this.blocks.add(new DoubleRectangle(new DoublePoint(point).sub(0.5, 0.5), new DoublePoint(1,1)));
+            }
+        }
+        for(DoublePoint doublePoint : wayPoints){
+            Node<Point> node = graph.findOrAdd(new Point((int)doublePoint.x, (int)doublePoint.y));
+            HashSet<DoublePoint> others = waypointsVisibleFrom(doublePoint);
+            for(DoublePoint other : others){
+                Node<Point> node2 = graph.findOrAdd(new Point((int)other.x, (int)other.y));
+                node.link(node2, node.data.sub(node2.data).len());
+            }
+        }
+    }
 }
