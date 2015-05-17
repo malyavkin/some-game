@@ -3,13 +3,31 @@ import java.util.*;
 
 
 public class Route {
+    ArrayList<Node> nodes;
+    double length;
 
+    public Route() {
+    }
+
+    public Route(Node startNode) {
+        this.nodes = new ArrayList<>();
+        nodes.add(startNode);
+        length = 0;
+    }
+
+    public Route same(){
+        Route r = new Route();
+        r.length = this.length;
+        r.nodes = new ArrayList<>();
+        r.nodes.addAll(nodes);
+        return r;
+    }
 }
 
 class RouteBuilder {
     private Map map;
     private ArrayList<DoubleRectangle> blocks = new ArrayList<>();
-    private ArrayList<DoublePoint> wayPoints = new ArrayList<>();
+    private ArrayList<Point> wayPoints = new ArrayList<>();
     private Graph<Point> graph;
     public RouteBuilder(Map map) {
         this.map = map;
@@ -124,12 +142,14 @@ class RouteBuilder {
         }
         return wp;
     }
-    public HashSet<DoublePoint> waypointsVisibleFrom(DoublePoint doublePoint) {
-        HashSet<DoublePoint> visibles = new HashSet<>();
-        for(DoublePoint doublePoint2 : wayPoints){
-            if(doublePoint != doublePoint2) {
-                if(!Geom.doIntersect(doublePoint, doublePoint2,blocks)) {
-                    visibles.add(doublePoint2);
+
+    public HashSet<Point> waypointsVisibleFrom(Point point) {
+
+        HashSet<Point> visibles = new HashSet<>();
+        for(Point point2 : wayPoints){
+            if(!point.equals(point2)) {
+                if(!Geom.doIntersect(new DoublePoint(point), new DoublePoint(point2),blocks)) {
+                    visibles.add(point2);
                 }
             }
         }
@@ -140,7 +160,7 @@ class RouteBuilder {
         graph = new Graph<>();
         HashSet<Point> wayPointCells= getWayPoints();
         for (Point p : wayPointCells) {
-            this.wayPoints.add(new DoublePoint(p));
+            this.wayPoints.add(p);
         }
         for (int i = 0; i < map.levelData.length; i++) {
             if(map.levelData[i].canCollide()) {
@@ -148,13 +168,75 @@ class RouteBuilder {
                 this.blocks.add(new DoubleRectangle(new DoublePoint(point).sub(0.5, 0.5), new DoublePoint(1,1)));
             }
         }
-        for(DoublePoint doublePoint : wayPoints){
-            Node<Point> node = graph.findOrAdd(new Point((int)doublePoint.x, (int)doublePoint.y));
-            HashSet<DoublePoint> others = waypointsVisibleFrom(doublePoint);
-            for(DoublePoint other : others){
-                Node<Point> node2 = graph.findOrAdd(new Point((int)other.x, (int)other.y));
-                node.link(node2, node.data.sub(node2.data).len());
+        for(Point p : wayPoints){
+            Point node = p.same();
+            HashSet<Point> others = waypointsVisibleFrom(node);
+            for(Point other : others){
+                graph.link_1way(node, other, node.sub(other).len());
             }
         }
+    }
+
+    public Route aStar (Point from, Point to){
+        HashSet<Point> visibleStart = waypointsVisibleFrom(from);
+        HashSet<Point> visibleFinish = waypointsVisibleFrom(to);
+        Node<Point> fromNode = graph.obtain(from);
+        Node<Point> toNode = graph.obtain(to);
+        Route result = null;
+        // Extending graph
+
+        for(Point point: visibleStart) {
+            graph.link_2way(from, point, from.sub(point).len());
+        }
+        for(Point point: visibleFinish) {
+            graph.link_2way(to, point, to.sub(point).len());
+        }
+
+        //pathfinding logic
+
+        HashMap<Point, Double> distances = new HashMap<>();
+        for(Node<Point> node: graph.nodes) {
+            distances.put(node.data, node.data.sub(to).len());
+        }
+
+
+        HashMap<Node<Point>, Route> front = new HashMap<>();
+        HashSet<Point> closed = new HashSet<>();
+
+        Route frontRoute = new Route(fromNode);
+        front.put(fromNode, frontRoute);
+
+        while (result == null && front.size() != 0) {
+            // selecting best node in front
+            Node<Point> bestNode = null;
+            for(Node<Point> node: front.keySet()){
+
+                if(bestNode == null || (front.get(bestNode).length > front.get(node).length)) {
+                    bestNode = node;
+                }
+                // put all adjacent (and not in close) to the best nodes to front
+                for(Node<Point> adjacent : bestNode.links.keySet()){
+                    // if one of adjacent nodes is already in front, compare routes and switch if the new one is shorter
+                    if(!front.containsKey(adjacent) || (
+                            front.containsKey(adjacent) && (front.get(adjacent).length > front.get(bestNode).length + bestNode.links.get(adjacent))
+                    )){
+                        Route newRoute = front.get(bestNode).same();
+                        newRoute.nodes.add(adjacent);
+                        front.put(adjacent, newRoute);
+                        if(adjacent == toNode) {
+                            result = newRoute;
+                        }
+                    }
+                }
+                // remove best from front
+                front.remove(bestNode);
+            }
+        }
+
+        //Detaching
+        graph.unlink_all(from);
+        graph.unlink_all(to);
+
+        return result;
     }
 }

@@ -1,53 +1,67 @@
 package rip.dfg;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Graph<T extends Comparable<T>> {
-    ArrayList<Node<T>> nodes = new ArrayList<>();
+    public ArrayList<Node<T>> nodes = new ArrayList<>();
 
-    public Node<T> findOrAdd(T data) {
+    public Node<T> obtain(T data) {
         for(Node<T> node : nodes){
             if(node.data.compareTo(data) == 0) return node;
         }
-        Node<T> node = new Node<>();
-
-        node.data = data;
+        Node<T> node = new Node<>(data);
         nodes.add(node);
         return node;
     }
+
     public Graph() {
 
     }
+
+    public void link_1way(T A, T B, double weight ){
+        Node<T> nA = obtain(A);
+        Node<T> nB = obtain(B);
+        nA.links.put(nB,weight);
+    }
+
+    public void link_2way(T A, T B, double weight ){
+        link_2way(A, B, weight, weight);
+    }
+    public void link_2way(T A, T B, double weightAB, double weightBA ){
+        link_1way(A, B, weightAB);
+        link_1way(A, B, weightBA);
+    }
+
+    // A ---X--> B being removed
+    // A <------ B remains
+    public void unlink_1way(T A, T B) {
+        Node<T> nA = obtain(A);
+        Node<T> nB = obtain(B);
+        nB.links.remove(nB);
+    }
+    public void unlink_2way(T A, T B) {
+        unlink_1way(A,B);
+        unlink_1way(B,A);
+    }
+    public void unlink_all(T A) {
+        Node<T> nA = obtain(A);
+        for(Node<T> node : nA.links.keySet()){
+            unlink_2way(A, node.data);
+        }
+    }
+
 }
 
 class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
     T data;
-    HashMap<Node, Double> links = new HashMap<>();
-    
-    public void link( Node other, double weight) {
-        if(links.containsKey(other)){
-            System.out.println("link already exist");
-        }
-        links.put(other, weight);
-    }
-    public void linkDual( Node other, double weight) {
-        this.linkDual(other, weight, weight);
-    }
-    public void linkDual( Node other, double weight_to, double weight_from) {
-        this.link(other, weight_to);
-        other.link(this, weight_from);
-    }
-    public void unlink (Node other) {
-        this.links.remove(other);
-    }
-    public void unlinkDual (Node other) {
-        this.unlink(other);
-        other.unlink(this);
-    }
+    HashMap<Node<T>, Double> links = new HashMap<>();
 
+    public Node() {}
+
+    public Node(T data) {
+        this.data = data;
+    }
     @Override
     public String toString() {
         return super.toString() + ":["+data.toString()+"]";

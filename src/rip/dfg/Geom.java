@@ -274,7 +274,6 @@ class DoublePoint implements Comparable<DoublePoint>{
         this.x = x;
         this.y = y;
     }
-
     public DoublePoint add(DoublePoint p) {
         return new DoublePoint(this.x + p.x, this.y + p.y);
     }

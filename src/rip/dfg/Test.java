@@ -1,5 +1,6 @@
 package rip.dfg;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Test {
@@ -250,12 +251,18 @@ public class Test {
             }
         }*/
         routeBuilder.buildGraph();
-        System.out.println(routeBuilder.waypointsVisibleFrom(new DoublePoint(2.5,4.0)));
+        System.out.println(routeBuilder.waypointsVisibleFrom(new Point(2,4)));
     }
 
     public static void main(String[] args) {
 
         fullmap();
+        HashMap<Integer, Integer> integerIntegerHashMap = new HashMap<>();
+        integerIntegerHashMap.put(1,2);
+        integerIntegerHashMap.put(1,3);
+        integerIntegerHashMap.put(1,4);
+        integerIntegerHashMap.put(1,5);
+        integerIntegerHashMap.put(1,6);
 
     }
 }
